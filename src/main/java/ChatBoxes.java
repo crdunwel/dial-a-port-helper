@@ -298,7 +298,10 @@ public class ChatBoxes {
         final Random random = new Random();
         final String[] sampleUsers = {"User1", "User2", "User3", "User4", "User5", "User6", "User7", "User8", "User9", "User10", "User11", "User12", "User13", "User14", "User15", "User16"};
         final String[] sampleMessages = {
-                "Hello, world!", "This is a test message.", "How are you?", "Can I get a port!", "Port WC->LS?"
+                "Hello, world!", "This is a test message.", "How are you?", "Can I get a port!",
+                "Port WC > LS?", "Could I get a port BB to WC", "Port from NK to steamfont",
+                "Port to Nek?", "Port from Nek?", "Hey there, pickup at surefall to WC?",
+                "Pickup at LS to steamfont?", "Port to Ferrot?"
         };
 
         simulationTimer = new Timer(messageInterval, new ActionListener() {
@@ -319,6 +322,7 @@ public class ChatBoxes {
 
                 // Append the message to the text pane
                 appendToPane(textPane, "<p>" + message + "</p>");
+                chatboxes.get(user).setLocations(PortInference.findLocation(message));
             }
         });
     }
@@ -333,13 +337,19 @@ public class ChatBoxes {
         return textPane;
     }
 
-    public class UserChatBox {
+    public UserChatBox getUserChatBox(String user) {
+        return chatboxes.get(user);
+    }
 
+    public class UserChatBox {
         private String userName;
         private JTextPane userTextPane;
         private JFrame frame;
         private JPanel titleBar;
+        private JPanel locFooterBar = null;
         private int tipperStatus;
+
+        private PortInference.PortLocationTuple locations;
 
         public UserChatBox(String userName, JTextPane userTextPane, JFrame frame, JPanel titleBar) {
             this.userName = userName;
@@ -417,6 +427,26 @@ public class ChatBoxes {
             logDatabase.setTipperStatus(userName, -1);
             userTextPane.setBackground(Color.decode(getSettings().getHighlightColorBad()));
             titleBar.setBackground(Color.decode(getSettings().getHighlightColorBad()).darker());
+        }
+
+        public PortInference.PortLocationTuple getLocations() {
+            return locations;
+        }
+
+        public void setLocations(PortInference.PortLocationTuple locations) {
+            this.locations = locations;
+            if (locFooterBar == null) {
+                locFooterBar = new JPanel();
+                locFooterBar.setPreferredSize(new Dimension(getSettings().getWindowWidth(), 20)); // Set the size of the footer bar
+                locFooterBar.setBackground(Color.LIGHT_GRAY); // Choose color for the footer bar
+                JLabel footerLabel = new JLabel(""); // Replace "Footer Text" with your desired text
+                locFooterBar.add(footerLabel);
+                frame.add(locFooterBar, BorderLayout.SOUTH);
+            }
+            JLabel retrievedLabel = (JLabel) locFooterBar.getComponent(0);
+            if (retrievedLabel != null && locations != null) {
+                retrievedLabel.setText(locations.toString());
+            }
         }
     }
 }

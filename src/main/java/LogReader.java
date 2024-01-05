@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
 
 public class LogReader {
     private final SimpleDateFormat logTimestampFormat = new SimpleDateFormat("[EEE MMM dd HH:mm:ss yyyy]");
-    private static Pattern NPC_TRANSACTION_MESSAGE = Pattern.compile("(\\d+ platinum|\\d+ gold|\\d+ silver|\\d+ copper)?\\s?(\\d+ platinum|\\d+ gold|\\d+ silver|\\d+ copper)?\\s?(\\d+ platinum|\\d+ gold|\\d+ silver|\\d+ copper)?\\s?(\\d+ platinum|\\d+ gold|\\d+ silver|\\d+ copper)?\\s?(per|for the) .+");
+    private static Pattern NPC_TRANSACTION_MESSAGE = Pattern.compile("(\\d+ platinum|\\d+ gold|\\d+ silver|\\d+ copper)(\\s?(\\d+ platinum|\\d+ gold|\\d+ silver|\\d+ copper)){0,3}\\s?(per|for the) .+");
     private MMORPGChatMonitor mmorpgChatMonitor;
     private LogDatabase logDatabase;
     private long lastReadPosition = 0; // Position in the file
@@ -29,6 +29,7 @@ public class LogReader {
     }
     public void stopMonitoring() {
         this.isMonitoring = false; // This will cause the loop in monitorLogFile to exit
+        this.lastReadPosition = 0;
     }
 
     private Settings getSettings() {
@@ -173,11 +174,13 @@ public class LogReader {
     }
 
     private String processLogLine(String line) {
+        if (line.isEmpty()) {
+            return null;
+        }
         if (isNpcTransactionMessage(line)) {
             System.out.println("Ignoring merchant: " + line);
             return null; // Ignore this line
         }
-
         if (line.contains("adds some coins to the trade")) {
             System.out.println(line);
             int startIndex = line.indexOf(']') + 2;
@@ -202,6 +205,7 @@ public class LogReader {
                 return null;
             }
             rawMessage = line.substring(endIndex + 13, line.length() - 1);
+
             message = "<font color='blue'><b>" + other + ":</b> " + rawMessage + "</font>";
             if (!logDatabase.insertLog(timestamp, other, "You", rawMessage)) {
                 return null;
@@ -240,6 +244,7 @@ public class LogReader {
         String formattedMessage = "<div data='" + timestamp + "' class='timestamp' style='text-align: center;'><strong>" + humanizedTimestamp + "</strong></div>" +
                 "<div>" + message + "</div>";
         mmorpgChatMonitor.getChatBoxes().appendToPane(textPane, formattedMessage);
+        mmorpgChatMonitor.getChatBoxes().getUserChatBox(other).setLocations(PortInference.findLocation(rawMessage));
 
         return null; // Return the receiver for any further processing
     }
