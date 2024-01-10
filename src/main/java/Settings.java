@@ -11,6 +11,8 @@ public class Settings {
     private float backgroundOpacity;
     private long lookbackSeconds;
     private String highlightColorBad;
+    private String msgSoundFilePath = "";
+    private boolean playSound = false;
 
     public String getLogFilePath() {
         return logFilePath;
@@ -90,5 +92,21 @@ public class Settings {
 
     public void setHighlightColorBad(String hightlightColorBad) {
         this.highlightColorBad = hightlightColorBad;
+    }
+
+    public String getMsgSoundFilePath() {
+        return msgSoundFilePath;
+    }
+
+    public void setMsgSoundFilePath(String msgSoundFilePath) {
+        this.msgSoundFilePath = msgSoundFilePath;
+    }
+
+    public boolean isPlaySound() {
+        return playSound;
+    }
+
+    public void setPlaySound(boolean playSound) {
+        this.playSound = playSound;
     }
 }

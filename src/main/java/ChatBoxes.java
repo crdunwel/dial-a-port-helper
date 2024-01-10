@@ -331,6 +331,9 @@ public class ChatBoxes {
         JTextPane textPane;
         if (!chatboxes.containsKey(user)) {
             textPane = createTextPaneForUser(user);
+            if (getSettings().isPlaySound() && (getSettings().getMsgSoundFilePath() != null || !"".equals(mmorpgChatMonitor.getSettings().getMsgSoundFilePath()))) {
+                SoundPlayer.playSound(mmorpgChatMonitor.getSettings().getMsgSoundFilePath());
+            }
         } else {
             textPane = chatboxes.get(user).getUserTextPane();
         }

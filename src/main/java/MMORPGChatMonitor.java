@@ -59,6 +59,8 @@ public class MMORPGChatMonitor {
             defaultSettings.setBackgroundColor("#D8D8D8");
             defaultSettings.setBackgroundOpacity(0.5f);
             defaultSettings.setLookbackSeconds(3600); // 1 hour in seconds
+            defaultSettings.setMsgSoundFilePath("");
+            defaultSettings.setPlaySound(false);
 
             saveSettings(defaultSettings); // Save the default settings
             this.settings = defaultSettings;

@@ -13,20 +13,22 @@ public class PortInference {
     public static final Pattern PORT_TO_PATTERN = Pattern.compile("(?i)port\\s+to\\s+((?:\\w+\\s)?\\w+)");
     // $1 > $2
     public static final Pattern GREATER_THAN_PATTERN = Pattern.compile("(?i)(\\b\\w+(?:\\s\\w+)?\\b)\\s*>\\s*(\\b\\w+(?:\\s\\w+)?\\b)");
+    public static final Pattern ARROW_PATTERN = Pattern.compile("(?i)(\\b\\w+(?:\\s\\w+)?\\b)\\s*->\\s*(\\b\\w+(?:\\s\\w+)?\\b)");
     public static final Pattern RIDE_TO_PATTERN = Pattern.compile("(?i)ride\\s+to\\s+((?:\\w+\\s)?\\w+)");
     public static final Pattern RIDE_FROM_TO_PATTERN = Pattern.compile("(?i)ride\\s+from\\s+((?:\\w+\\s)?\\w+)\\s+to\\s+((?:\\w+\\s)?\\w+)");
     public static final Pattern PICKUP_AT_TO_PATTERN = Pattern.compile("(?i)pickup\\s+at\\s+((?:\\w+\\s)?\\w+)\\s+to\\s+((?:\\w+\\s)?\\w+)");
     public static final Pattern PICKUP_FROM_TO_PATTERN = Pattern.compile("(?i)pickup\\s+from\\s+((?:\\w+\\s)?\\w+)\\s+to\\s+((?:\\w+\\s)?\\w+)");
     // $1 to $2
-    public static final Pattern TO_PATTERN = Pattern.compile("(?i)((?:\\w+\\s)?\\w+)\\s+to\\s+((?:\\w+\\s)?\\w+)");
+    public static final Pattern ZONE_TO_ZONE_PATTERN = Pattern.compile("(?i)((?:\\w+\\s)?\\w+)\\s+to\\s+((?:\\w+\\s)?\\w+)");
 
     public static final Set<Pattern> FROM_TO_PATTERNS = new HashSet<>(Arrays.asList(
             FROM_TO_PATTERN,
             GREATER_THAN_PATTERN,
+            ARROW_PATTERN,
             RIDE_FROM_TO_PATTERN,
             PICKUP_AT_TO_PATTERN,
             PICKUP_FROM_TO_PATTERN,
-            TO_PATTERN
+            ZONE_TO_ZONE_PATTERN
     ));
 
     public static final Set<Pattern> FROM_PATTERNS = new HashSet<>(Arrays.asList(
@@ -54,13 +56,13 @@ public class PortInference {
         zones.put(PortZone.NORTH_KARANA, new HashSet<>(Arrays.asList("nk", "north karana", "karana", "nkarana", "karanas")));
         zones.put(PortZone.WEST_COMMONLANDS, new HashSet<>(Arrays.asList("wc", "common", "commons", "wcommon", "wcommons", "wcom")));
         zones.put(PortZone.TOXXULIA_FOREST, new HashSet<>(Arrays.asList("tox", "toxx", "toxxulia", "toxulia")));
-        zones.put(PortZone.BUTCHER_BLOCK, new HashSet<>(Arrays.asList("bb", "butcher", "bblock", "butcherblock", "butcher block")));
+        zones.put(PortZone.BUTCHER_BLOCK, new HashSet<>(Arrays.asList("bb", "butcher", "bblock", "butcherblock", "butcher block", "bbm")));
         zones.put(PortZone.MISTY_THICKET, new HashSet<>(Arrays.asList("misty", "misty thicket", "mt")));
-        zones.put(PortZone.LAVASTORM, new HashSet<>(Arrays.asList("ls", "lava", "lavastorm", "lstorm")));
-        zones.put(PortZone.FEERROTT, new HashSet<>(Arrays.asList("feerrott", "ferot", "feerott", "feerrot", "ferrot", "ferrott", "feerot")));
+        zones.put(PortZone.LAVASTORM, new HashSet<>(Arrays.asList("ls", "lava", "lavastorm", "lstorm", "lavas")));
+        zones.put(PortZone.FEERROTT, new HashSet<>(Arrays.asList("feerrott", "ferot", "feerott", "feerrot", "ferrot", "ferrott", "feerot", "feer")));
         zones.put(PortZone.SOUTHERN_RO, new HashSet<>(Arrays.asList("sro", "ro", "south ro", "southern ro")));
         zones.put(PortZone.SUREFALL_GLADE, new HashSet<>(Arrays.asList("sfg", "surefall", "surefall glade", "sfall")));
-        zones.put(PortZone.STEAMFONT_MOUNTAINS, new HashSet<>(Arrays.asList("sf", "steam", "steamfont", "steamfont mountains", "steamfront", "stm mtn", "steam mountains")));
+        zones.put(PortZone.STEAMFONT_MOUNTAINS, new HashSet<>(Arrays.asList("sf", "steam", "steamfont", "steamfont mountains", "steamfront", "stm mtn", "steam mountains", "staemfont")));
         zones.put(PortZone.EAST_KARANA, new HashSet<>(Arrays.asList("ek", "east karana", "ekarana")));
         zones.put(PortZone.NEKTULOS_FOREST, new HashSet<>(Arrays.asList("nek", "nek forest")));
         zones.put(PortZone.WEST_KARANA, new HashSet<>(Arrays.asList("wk", "west karana", "wkarana")));

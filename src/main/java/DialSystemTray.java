@@ -143,11 +143,33 @@ public class DialSystemTray {
         // Lookback Seconds Panel
         JPanel lookbackSecondsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JLabel lblLookbackSeconds = new JLabel("Lookback Seconds:");
-        // Increase the column size for more space
         JTextField lookbackSecondsField = new JTextField(String.valueOf(getSettings().getLookbackSeconds()), 10); // Adjusted column size
         lookbackSecondsPanel.add(lblLookbackSeconds);
         lookbackSecondsPanel.add(lookbackSecondsField);
         settingsDialog.add(lookbackSecondsPanel);
+
+        // Sound File Path Panel
+        JPanel soundFilePathPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JLabel lblsoundFilePath = new JLabel("Sound File Path:");
+        JTextField soundFilePathField = new JTextField(getSettings().getMsgSoundFilePath(), 20);
+        JButton chooseSoundFileButton = new JButton("Choose File");
+        chooseSoundFileButton.addActionListener(e -> {
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+            if (fileChooser.showOpenDialog(settingsDialog) == JFileChooser.APPROVE_OPTION) {
+                File selectedFile = fileChooser.getSelectedFile();
+                soundFilePathField.setText(selectedFile.getAbsolutePath());
+            }
+        });
+
+        JCheckBox playSoundCheckbox = new JCheckBox("Play Sound");
+        playSoundCheckbox.setSelected(getSettings().isPlaySound());
+
+        soundFilePathPanel.add(lblsoundFilePath);
+        soundFilePathPanel.add(soundFilePathField);
+        soundFilePathPanel.add(chooseSoundFileButton);
+        soundFilePathPanel.add(playSoundCheckbox);
+        settingsDialog.add(soundFilePathPanel);
 
         // Simulation Toggle Button
         JButton toggleSimulationButton = new JButton("Start Simulation");
@@ -232,6 +254,8 @@ public class DialSystemTray {
             getSettings().setBackgroundColor(Utils.toHexString(bgColorPreview.getBackground()));
             // getSettings().setBackgroundOpacity(Float.parseFloat(bgOpacityField.getText()));
             getSettings().setLookbackSeconds(Integer.parseInt(lookbackSecondsField.getText()));
+            getSettings().setMsgSoundFilePath(soundFilePathField.getText());
+            getSettings().setPlaySound(playSoundCheckbox.isSelected());
             mmorpgChatMonitor.saveSettings(getSettings());
             logReaderItem.setState(false);
             mmorpgChatMonitor.stopMonitoring();
